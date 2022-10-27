@@ -10,6 +10,12 @@ public final class CachingTask implements Task {
         while (!CacheManager.isStopped()) {
             if (CacheManager.size() < ConfigManager.maxCacheSize) {
                 CacheManager.add(Cord.generateNewCord());
+                try {
+                    Thread.sleep(3000L);
+                }catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
             }
         }
     }

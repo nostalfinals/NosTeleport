@@ -2,10 +2,9 @@ package top.plutomc.nosteleport.utils;
 
 import com.bekvon.bukkit.residence.api.ResidenceApi;
 import io.papermc.lib.PaperLib;
-import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
-import org.bukkit.World;
+import org.bukkit.Material;
 import top.plutomc.nosteleport.managers.ConfigManager;
 
 import java.util.Random;
@@ -14,16 +13,19 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public final class Cord {
     private static final Random FAST_RANDOM = new FastRandom();
-    World world;
     int x;
     int y;
     int z;
 
     private Cord(int x, int z) {
-        this.world = ConfigManager.bukkitWorld;
         this.x = x;
         this.z = z;
-        this.y = world.getHighestBlockYAt(x, z);
+        this.y = ConfigManager.bukkitWorld.getHighestBlockYAt(x, z);
+    }
+
+    private static boolean isFluid(int x, int z) {
+        Location location = new Location(ConfigManager.bukkitWorld, x, ConfigManager.bukkitWorld.getHighestBlockYAt(x, z), z);
+        return location.getBlock().getType() == Material.WATER || location.getBlock().getType() == Material.LAVA;
     }
 
     public static boolean badBlock(int x, int z) {
@@ -34,13 +36,17 @@ public final class Cord {
         AtomicBoolean isSolid = new AtomicBoolean(false);
 
         chunk.thenAccept(chunk1 -> {
-            isAir.set(chunk1.getBlock(x, ConfigManager.bukkitWorld.getHighestBlockYAt(x, z), z).getType().isAir());
-            hasGravity.set(chunk1.getBlock(x, ConfigManager.bukkitWorld.getHighestBlockYAt(x, z), z).getType().hasGravity());
-            isSolid.set(chunk1.getBlock(x, ConfigManager.bukkitWorld.getHighestBlockYAt(x, z), z).getType().isSolid());
+            int highest = ConfigManager.bukkitWorld.getHighestBlockYAt(x, z);
+
+            isAir.set(chunk1.getBlock(x, highest, z).getType().isAir());
+            hasGravity.set(chunk1.getBlock(x, highest, z).getType().hasGravity());
+            isSolid.set(chunk1.getBlock(x, highest, z).getType().isSolid());
         });
 
         return !isAir.get()
-                && !hasGravity.get() && isSolid.get()
+                && !hasGravity.get()
+                && isSolid.get()
+                && !isFluid(x, z)
                 && ResidenceApi.getResidenceManager().getByLoc(new Location(ConfigManager.bukkitWorld, x, ConfigManager.bukkitWorld.getHighestBlockYAt(x, z), z)) == null;
     }
 
@@ -62,10 +68,6 @@ public final class Cord {
         }
     }
 
-    public World getWorld() {
-        return world;
-    }
-
     public int getX() {
         return x;
     }
@@ -76,5 +78,9 @@ public final class Cord {
 
     public int getZ() {
         return z;
+    }
+
+    public Location toLocation() {
+        return new Location(ConfigManager.bukkitWorld, x, y, z);
     }
 }

@@ -15,6 +15,7 @@ public final class TaskManager {
     public static void init() {
         taskExecutor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors(), new ThreadFactoryBuilder()
                 .setNameFormat("NosTeleport Task Executor - %s")
+                .setPriority(Thread.MIN_PRIORITY)
                 .build());
     }
 

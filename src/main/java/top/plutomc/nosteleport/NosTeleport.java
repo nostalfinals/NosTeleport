@@ -8,19 +8,13 @@ import top.plutomc.nosteleport.managers.CacheManager;
 import top.plutomc.nosteleport.managers.ConfigManager;
 import top.plutomc.nosteleport.managers.TaskManager;
 import top.plutomc.nosteleport.tasks.CachingTask;
-import top.plutomc.nosteleport.tasks.ChunkKeepingTask;
 
 public final class NosTeleport extends JavaPlugin {
     private static JavaPlugin instance;
     private static boolean serverFullyLoaded;
-    private static boolean beingStop = false;
 
     public static JavaPlugin getInstance() {
         return instance;
-    }
-
-    public static boolean isBeingStop() {
-        return beingStop;
     }
 
     public static void reload() {
@@ -29,16 +23,11 @@ public final class NosTeleport extends JavaPlugin {
         TaskManager.stop();
         CacheManager.stop();
 
-        beingStop = true;
-
         ConfigManager.init();
         TaskManager.init();
         CacheManager.init();
 
-        beingStop = false;
-
         TaskManager.submit(new CachingTask());
-        TaskManager.submit(new ChunkKeepingTask());
     }
 
     public static boolean isServerFullyLoaded() {
@@ -91,7 +80,6 @@ public final class NosTeleport extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        beingStop = true;
         serverFullyLoaded = false;
 
         getServer().getScheduler().cancelTasks(this);

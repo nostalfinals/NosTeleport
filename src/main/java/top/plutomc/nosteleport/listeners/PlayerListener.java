@@ -3,7 +3,6 @@ package top.plutomc.nosteleport.listeners;
 import io.papermc.lib.PaperLib;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Chunk;
-import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -11,6 +10,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import top.plutomc.nosteleport.managers.CacheManager;
 import top.plutomc.nosteleport.managers.ConfigManager;
+import top.plutomc.nosteleport.utils.ChunkHelper;
 import top.plutomc.nosteleport.utils.Cord;
 
 import java.util.concurrent.CompletableFuture;
@@ -33,7 +33,8 @@ public final class PlayerListener implements Listener {
             Cord cord = CacheManager.get();
             CompletableFuture<Chunk> chunk = PaperLib.getChunkAtAsync(ConfigManager.bukkitWorld, cord.getX(), cord.getZ());
             chunk.thenAccept(chunk1 -> {
-                player.teleportAsync(new Location(ConfigManager.bukkitWorld, cord.getX(), cord.getY(), cord.getZ()));
+                player.teleportAsync(cord.toLocation());
+                ChunkHelper.removeTicket(cord);
             });
         }
     }
@@ -53,12 +54,8 @@ public final class PlayerListener implements Listener {
         if (player.getPotentialBedLocation() == null) {
             Cord cord = CacheManager.get();
             player.sendMessage(MiniMessage.miniMessage().deserialize(ConfigManager.msgRandomTeleportAfterRespawning));
-            /*
-            Cord cord = CacheManager.get();
-            player.sendMessage(MiniMessage.miniMessage().deserialize(ConfigManager.msgRandomTeleportAfterRespawning));
-            player.setBedSpawnLocation(new Location(ConfigManager.bukkitWorld, cord.getX(), cord.getY(), cord.getZ()));
-             */
-            event.setRespawnLocation(new Location(ConfigManager.bukkitWorld, cord.getX(), cord.getY(), cord.getZ()));
+            event.setRespawnLocation(cord.toLocation());
+            ChunkHelper.removeTicket(cord);
         }
     }
 }
