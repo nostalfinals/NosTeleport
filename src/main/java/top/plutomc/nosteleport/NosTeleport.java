@@ -14,6 +14,13 @@ public final class NosTeleport extends JavaPlugin {
         return instance;
     }
 
+    public static void reload() {
+        Bukkit.getScheduler().cancelTasks(NosTeleport.getInstance());
+        TaskManager.stop();
+        ConfigManager.init();
+        TaskManager.init();
+    }
+
     @Override
     public void onEnable() {
         instance = this;
@@ -53,12 +60,5 @@ public final class NosTeleport extends JavaPlugin {
         getServer().getScheduler().cancelTasks(this);
         TaskManager.stop();
         getLogger().info("Plugin disabled.");
-    }
-
-    public static void reload() {
-        Bukkit.getScheduler().cancelTasks(NosTeleport.getInstance());
-        TaskManager.stop();
-        ConfigManager.init();
-        TaskManager.init();
     }
 }
