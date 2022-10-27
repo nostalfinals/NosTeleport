@@ -1,0 +1,8 @@
+main: top.plutomc.nosteleport.NosTeleport
+name: NosTeleport
+version: 1.0.0
+api-version: 1.13
+author: nostalgic853
+depend:
+  - Residence
+  - BetterRTP
