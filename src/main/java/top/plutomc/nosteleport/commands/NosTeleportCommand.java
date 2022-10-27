@@ -31,6 +31,6 @@ public final class NosTeleportCommand implements TabExecutor {
             content.add("reload");
         }
 
-        return null;
+        return content;
     }
 }

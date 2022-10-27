@@ -2,8 +2,6 @@ package top.plutomc.nosteleport.managers;
 
 import com.google.common.base.Throwables;
 import com.google.common.collect.ImmutableMap;
-import me.SuperRonanCraft.BetterRTP.player.rtp.RTP_SHAPE;
-import me.SuperRonanCraft.BetterRTP.references.rtpinfo.worlds.WorldLocations;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
@@ -23,18 +21,18 @@ import java.util.logging.Level;
 public final class ConfigManager {
     public static File configFile;
     public static YamlConfiguration config;
-    public static String msgFirstTeleport = "<red>这是你初次进入服务器，正在随机传送...";
+    public static String msgFirstTeleport = "<red>这是你初次进入服务器，请等待随机传送！";
     public static String msgRandomTeleportAfterRespawning = "<red>请注意：如果你没有睡过床的话，死亡并重生之后会被随机传送到一个地方！";
     public static String msgReloadCompleted = "<green>重载成功。";
     public static boolean teleportWhenJoinFirst = true;
     public static boolean teleportAfterRespawning = true;
-    public static int teleportRadius = 5000;
     public static String world = "world";
     public static World bukkitWorld;
-    public static int centerX = 0;
-    public static int centerZ = 0;
-
-    public static WorldLocations worldLocations;
+    public static int minX = 0;
+    public static int minZ = 0;
+    public static int maxX = 5000;
+    public static int maxZ = 5000;
+    public static int maxCacheSize = 4;
 
     private ConfigManager() {
     }
@@ -147,18 +145,15 @@ public final class ConfigManager {
         teleportWhenJoinFirst = getBoolean("settings.teleport-when-join-first", teleportWhenJoinFirst);
         teleportAfterRespawning = getBoolean("settings.teleport-after-respawning", teleportAfterRespawning);
 
-        teleportRadius = getInt("settings.teleporting.radius", teleportRadius);
         world = getString("settings.teleporting.world", world);
-        centerX = getInt("settings.teleporting.center.X", centerX);
-        centerZ = getInt("settings.teleporting.center.Z", centerZ);
-
         bukkitWorld = Bukkit.getWorld(world);
 
-        worldLocations = new WorldLocations("NosTeleportWorldLocations");
-        worldLocations.setCenterX(centerX);
-        worldLocations.setCenterZ(centerZ);
-        worldLocations.setMaxRadius(teleportRadius);
-        worldLocations.setShape(RTP_SHAPE.CIRCLE);
-        worldLocations.setWorld(Bukkit.getWorld(world));
+        maxX = getInt("settings.teleporting.maxX", maxX);
+        maxZ = getInt("settings.teleporting.maxZ", maxZ);
+
+        minX = getInt("settings.teleporting.minX", minX);
+        minZ = getInt("settings.teleporting.minZ", minZ);
+
+        maxCacheSize = getInt("settings.caching.max-size", maxCacheSize);
     }
 }
