@@ -1,6 +1,7 @@
 package top.plutomc.nosteleport;
 
 import org.bukkit.plugin.java.JavaPlugin;
+import top.plutomc.nosteleport.listeners.PlayerListener;
 
 public final class NosTeleport extends JavaPlugin {
     private static JavaPlugin instance;
@@ -12,6 +13,7 @@ public final class NosTeleport extends JavaPlugin {
     @Override
     public void onEnable() {
         instance = this;
+
         getLogger().info("NosTeleport By nostal");
         getLogger().info("QQ -> 545847685");
         getLogger().info("Discord -> nostal#5126");
@@ -24,12 +26,18 @@ public final class NosTeleport extends JavaPlugin {
             return;
         }
 
+        ConfigManager.init();
+        TaskManager.init();
+
+        getServer().getPluginManager().registerEvents(new PlayerListener(), this);
+
         getLogger().info("Plugin loaded.");
     }
 
     @Override
     public void onDisable() {
         getServer().getScheduler().cancelTasks(this);
+        TaskManager.stop();
         getLogger().info("Plugin disabled.");
     }
 }
