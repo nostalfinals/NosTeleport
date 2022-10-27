@@ -2,6 +2,8 @@ package top.plutomc.nosteleport;
 
 import org.bukkit.plugin.java.JavaPlugin;
 import top.plutomc.nosteleport.listeners.PlayerListener;
+import top.plutomc.nosteleport.managers.ConfigManager;
+import top.plutomc.nosteleport.managers.TaskManager;
 
 public final class NosTeleport extends JavaPlugin {
     private static JavaPlugin instance;

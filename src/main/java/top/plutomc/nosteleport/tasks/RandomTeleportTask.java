@@ -5,7 +5,7 @@ import me.SuperRonanCraft.BetterRTP.player.rtp.RTPSetupInformation;
 import me.SuperRonanCraft.BetterRTP.player.rtp.RTP_TYPE;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import top.plutomc.nosteleport.ConfigManager;
+import top.plutomc.nosteleport.managers.ConfigManager;
 
 public final class RandomTeleportTask implements Task {
     final Player PLAYER;

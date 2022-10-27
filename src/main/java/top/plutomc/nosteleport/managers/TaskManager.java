@@ -1,4 +1,4 @@
-package top.plutomc.nosteleport;
+package top.plutomc.nosteleport.managers;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import top.plutomc.nosteleport.tasks.Task;
