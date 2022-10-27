@@ -1,7 +1,10 @@
 package top.plutomc.nosteleport.utils;
 
+import com.bekvon.bukkit.residence.api.ResidenceApi;
 import io.papermc.lib.PaperLib;
+import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
+import org.bukkit.Location;
 import org.bukkit.World;
 import top.plutomc.nosteleport.managers.ConfigManager;
 
@@ -36,7 +39,9 @@ public final class Cord {
             isSolid.set(chunk1.getBlock(x, ConfigManager.bukkitWorld.getHighestBlockYAt(x, z), z).getType().isSolid());
         });
 
-        return !isAir.get() && !hasGravity.get() && isSolid.get();
+        return !isAir.get()
+                && !hasGravity.get() && isSolid.get()
+                && ResidenceApi.getResidenceManager().getByLoc(new Location(ConfigManager.bukkitWorld, x, ConfigManager.bukkitWorld.getHighestBlockYAt(x, z), z)) == null;
     }
 
     private static int randomX() {
