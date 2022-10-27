@@ -25,6 +25,7 @@ public final class ConfigManager {
     public static YamlConfiguration config;
     public static String msgFirstTeleport = "<red>这是你初次进入服务器，正在随机传送...";
     public static String msgRandomTeleportAfterRespawning = "<red>请注意：如果你没有睡过床的话，死亡并重生之后会被随机传送到一个地方！";
+    public static String msgReloadCompleted = "<green>重载成功。";
     public static boolean teleportWhenJoinFirst = true;
     public static boolean teleportAfterRespawning = true;
     public static int teleportRadius = 5000;
@@ -139,6 +140,7 @@ public final class ConfigManager {
     private static void message() {
         msgFirstTeleport = getString("messages.first-teleport", msgFirstTeleport);
         msgRandomTeleportAfterRespawning = getString("messages.random-teleport-after-dying", msgRandomTeleportAfterRespawning);
+        msgReloadCompleted = getString("messages.reload-completed", msgReloadCompleted);
     }
 
     private static void settings() {

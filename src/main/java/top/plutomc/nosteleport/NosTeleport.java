@@ -1,6 +1,8 @@
 package top.plutomc.nosteleport;
 
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
+import top.plutomc.nosteleport.commands.NosTeleportCommand;
 import top.plutomc.nosteleport.listeners.PlayerListener;
 import top.plutomc.nosteleport.managers.ConfigManager;
 import top.plutomc.nosteleport.managers.TaskManager;
@@ -28,10 +30,20 @@ public final class NosTeleport extends JavaPlugin {
             return;
         }
 
+        try {
+            Class.forName("cc.keyimc.keyi.KeyiConfig");
+            getLogger().info("Thank you for using KeYi!");
+            getLogger().info("Love from the developer of KeYi. <3");
+        } catch (ClassNotFoundException ignored) {
+        }
+
         ConfigManager.init();
         TaskManager.init();
 
         getServer().getPluginManager().registerEvents(new PlayerListener(), this);
+
+        getServer().getPluginCommand("nosteleport").setExecutor(new NosTeleportCommand());
+        getServer().getPluginCommand("nosteleport").setTabCompleter(new NosTeleportCommand());
 
         getLogger().info("Plugin loaded.");
     }
@@ -41,5 +53,12 @@ public final class NosTeleport extends JavaPlugin {
         getServer().getScheduler().cancelTasks(this);
         TaskManager.stop();
         getLogger().info("Plugin disabled.");
+    }
+
+    public static void reload() {
+        Bukkit.getScheduler().cancelTasks(NosTeleport.getInstance());
+        TaskManager.stop();
+        ConfigManager.init();
+        TaskManager.init();
     }
 }

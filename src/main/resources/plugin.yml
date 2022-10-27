@@ -6,3 +6,7 @@ author: nostalgic853
 depend:
   - Residence
   - BetterRTP
+commands:
+  nosteleport:
+    permission: nosteleport.command
+    usage: /nosteleport
